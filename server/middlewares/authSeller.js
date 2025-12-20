@@ -6,7 +6,7 @@ const authSeller = async (req, resizeBy, next)=>{
 
         try {
             const tokenDecode = jwt.verify(sellerToken, process.env.JWT_SECRET)
-console.log('seller auth -> ', tokenDecode)
+            console.log('seller auth -> ', tokenDecode)
             if (tokenDecode.email === process.env.process.env.JWT_SECRET) {
                 next()
             }else{
