@@ -4,6 +4,8 @@ import cookieParser from "cookie-parser";
 import cors from "cors"
 import dotenv from "dotenv";
 import connectDB from './config/connectdb.js';
+import userRouter from './routes/userRoutes.js';
+import sellerRouter from './routes/sellerRoutes.js';
 dotenv.config();
 const app = express()
 const port = process.env.PORT || 3000  ; 
@@ -18,7 +20,8 @@ app.use(cors({
 })); 
 
 app.get('/', (req, res)=> res.send("server is working...!!"))
-
+app.use('/api/user', userRouter)
+app.use('/api/seller', sellerRouter)
 
 app.listen(port , ()=>{
     console.log(`http://localhost:${port}/`)
