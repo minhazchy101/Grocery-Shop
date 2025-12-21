@@ -45,7 +45,7 @@ console.log('selectedAddress', selectedAddress)
 console.log('selectedAddress', selectedAddress.city)
   return (
     products.length > 0 && (
-      <div className="flex flex-col md:flex-row mt-16  w-full">
+      <div className="flex flex-col md:flex-row mt-20  w-full">
         <div className="flex-1 max-w-4xl">
           <h1 className="text-3xl font-medium mb-6">
             Shopping Cart{" "}
@@ -53,74 +53,107 @@ console.log('selectedAddress', selectedAddress.city)
               {getCartCount()} Items
             </span>
           </h1>
+ {cartArray && cartArray.length > 0 ? (
+  <div className="space-y-4">
+    {/* Header */}
+    <div className="grid grid-cols-[2fr_1fr_1fr] text-gray-400 text-sm font-semibold border-b pb-3">
+      <p>Product</p>
+      <p className="text-center">Subtotal</p>
+      <p className="text-center">Action</p>
+    </div>
 
-          <div className="grid grid-cols-[2fr_1fr_1fr] text-gray-500 text-base font-medium pb-3">
-            <p className="text-left">Product Details</p>
-            <p className="text-center">Subtotal</p>
-            <p className="text-center">Action</p>
+    {/* Cart Items */}
+    {cartArray.map((product, index) => (
+      <div
+        key={index}
+        className="grid grid-cols-[2fr_1fr_1fr] items-center bg-white rounded-xl shadow-sm hover:shadow-md transition p-4"
+      >
+        {/* Product Info */}
+        <div className="flex items-center gap-4">
+          <div
+            className="w-24 h-24 border rounded-lg overflow-hidden cursor-pointer bg-gray-50"
+            onClick={() => {
+              navigate(`/products/${product.category.toLowerCase()}/${product._id}`);
+              scrollTo(0, 0);
+            }}
+          >
+            <img
+              src={product.image[0]}
+              alt={product.name}
+              className="w-full h-full object-cover hover:scale-105 transition"
+            />
           </div>
 
-          {cartArray.map((product, index) => (
-            <div
-              key={index}
-              className="grid grid-cols-[2fr_1fr_1fr] text-gray-500 items-center text-sm md:text-base font-medium pt-3"
-              
-   
-            >
-              <div className="flex items-center md:gap-6 gap-3">
-                <div className="cursor-pointer w-24 h-24 flex items-center justify-center border border-gray-300 rounded overflow-hidden">
-                  <img
-                    className="max-w-full h-full object-cover"
-                    src={product.image[0]}
-                    alt={product.name}
-                     onClick={()=> {navigate(`/products/${product.category.toLowerCase()}/${product._id}`);scrollTo(0,0)} }
-                  />
-                </div>
-                <div>
-                  <p className="hidden md:block font-semibold">
-                    {product.name}
-                  </p>
-                  <div className="font-normal text-gray-500/70">
-                    <p>
-                      Weight: <span>{product.weight || "N/A"}</span>
-                    </p>
-                    <div className="flex items-center">
-                      <p>Qty:</p>
-                      <select onChange={e => updateCartItem(product._id, Number(e.target.value))}
-                      value={cartItems[product._id]}
-                      className="outline-none">
-                        {Array(
-                          cartItems[product._id] > 9
-                            ? cartItems[product._id]
-                            : 9
-                        )
-                          .fill("")
-                          .map((_, index) => (
-                            <option key={index} value={index + 1}>
-                              {index + 1}
-                            </option>
-                          ))}
-                      </select>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <p className="text-center">
-               {currency}{product.offerPrice * product.quantity}
-              </p>
-              <button className="cursor-pointer mx-auto" 
-              onClick={()=> removeFromCartItem(product._id)}
-              >
-                <img src={assets.remove_icon} className="w-6 h-6 inline-block" alt="" />
-              </button>
-            </div>
-          ))}
+          <div>
+            <p className="font-semibold text-gray-800">{product.name}</p>
+            <p className="text-sm text-gray-500">
+              Weight: {product.weight || "N/A"}
+            </p>
 
-          <button 
-    onClick={()=> {navigate(`/products`);scrollTo(0,0)} } className="group cursor-pointer flex items-center mt-8 gap-2 text-primary font-medium">
+            <div className="flex items-center gap-2 mt-2 text-sm">
+              <span className="text-gray-500">Qty</span>
+              <select
+                value={cartItems[product._id]}
+                onChange={(e) =>
+                  updateCartItem(product._id, Number(e.target.value))
+                }
+                className="border rounded-md px-2 py-1 outline-none focus:ring-2 focus:ring-black/10"
+              >
+                {Array(
+                  cartItems[product._id] > 9
+                    ? cartItems[product._id]
+                    : 9
+                )
+                  .fill("")
+                  .map((_, i) => (
+                    <option key={i} value={i + 1}>
+                      {i + 1}
+                    </option>
+                  ))}
+              </select>
+            </div>
+          </div>
+        </div>
+
+        {/* Price */}
+        <p className="text-center font-semibold text-gray-800">
+          {currency}
+          {product.offerPrice * product.quantity}
+        </p>
+
+        {/* Remove */}
+        <button
+          onClick={() => removeFromCartItem(product._id)}
+          className="mx-auto p-2 rounded-full hover:bg-red-50 transition"
+        >
+          <img
+            src={assets.remove_icon}
+            alt="Remove"
+            className="w-5 h-5"
+          />
+        </button>
+      </div>
+    ))}
+
+    <button 
+         onClick={()=> {navigate(`/products`);scrollTo(0,0)} } className="group cursor-pointer flex items-center mt-8 gap-2 text-primary font-medium">
            <img src={assets.black_arrow_icon} alt="" className="rotate-180"/>
             Continue Shopping
           </button>
+  </div>
+) : (
+  <div className="flex flex-col items-center justify-center py-16 text-gray-500 space-y-4">
+    <p className="text-lg font-medium">Your cart is empty</p>
+    <button 
+         onClick={()=> {navigate(`/products`);scrollTo(0,0)} } className=" group cursor-pointer flex items-center mt-8 gap-2 text-primary font-medium">
+           <img src={assets.black_arrow_icon} alt="" className="rotate-180"/>
+            Start adding products to see them here
+          </button>
+  </div>
+)}
+
+
+          
         </div>
 
         <div className="max-w-[360px] w-full bg-gray-100/40 p-5 max-md:mt-16 border border-gray-300/70">

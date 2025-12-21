@@ -26,13 +26,15 @@ const App = () => {
       <Toaster/>
    {!theSeller &&   <Navbar/>}
    {showLogin && <Login/>}
-      <div className={`${!theSeller && " px-6 md:px-16 lg:px-24 xl:px-32 py-4" }  mt-20`}>
+      <div className={`${!theSeller && " px-6 md:px-16 lg:px-24 xl:px-32 py-4" }`}>
         <Routes>
-          <Route path='/' element={<Home/>}/>
+          
+         <Route path='/' element={<Home/>}/>
          <Route path='/products' element={<AllProducts/>}/>
          <Route path='/products/:category' element={<ProductsCategories/>}/>
          <Route path='/products/:category/:id' element={<ProductsDetails/>}/>
          <Route path='/cart' element={<Cart/>}/>
+         
          <Route path='/add-address' element={<AddAddress/>}/>
          <Route path='/my-orders' element={<MyOrders/>}/>
          <Route path='/seller' element={isSeller ? <SellerLayout/> : <SellerLogin/>}>

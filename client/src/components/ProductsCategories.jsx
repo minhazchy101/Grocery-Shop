@@ -13,7 +13,7 @@ const ProductsCategories = () => {
     
     
   return (
-    <div>
+    <div className='mt-20'>
         <div className="flex flex-col items-end w-max">
             {searchCategory ? <p className='text-2xl font-bold uppercase'>{searchCategory?.text}</p> : <p className='text-2xl font-bold uppercase'>No Category</p>}
            

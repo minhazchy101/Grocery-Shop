@@ -2,24 +2,26 @@ import {v2 as cloudinary}  from 'cloudinary'
 import Product from '../models/Products.js'
 
 
-//  Add Products : api/products/add
+//  Add Products : api/product/add
 export const addProducts = async (req, res)=>{
-try {
-    let productData = JSON.parse(req.body.productData)
-    const images = req.files 
+    try {
+        let productData = JSON.parse(req.body.productData)
+        const images = req.files ;
 
     let imagesURL = await Promise.all(
         images.map(async (item)=>{
             let result = await cloudinary.uploader.upload(item.path, {resource_type : 'image'});
-            return result.secure_url
+            return result.secure_url ;
         })
     )
-    await Product.create({...productData, image : imagesURL}) 
-
-    res.json({success : true, message : 'Product added successfully', productData})
+  
+    const product =  await Product.create({...productData, image : imagesURL})
+    console.log(product)
+       res.json({success : true, message : 'Product added successfully', product})
 } catch (error) {
        console.log('Add Products Error -> ', error.message)
-        return res.json({success : false, message : error.message})
+    //    console.log("Headers sent?", res.headersSent);
+         res.json({success : false, message : error.message})
 }
 }
 //  Get Products : api/products/lists
@@ -48,10 +50,12 @@ export const productById = async (req, res)=>{
 
 //  change Products Stock  : api/products/stock
 export const changeStock = async (req, res)=>{
+    console.log("changeStock server ")
+    console.log("req.body -> ", req.body)
+    const {id,inStock} = req.body; 
 try {
-      const {id,inStock} = res.body; 
       await Product.findByIdAndUpdate(id, {inStock})
-       res.json({success : true, message : "Stock updated"})
+     res.json({success : true, message : "Stock updated"})
 
     } catch (error) {
         console.log('In Stock error -> ', error.message)

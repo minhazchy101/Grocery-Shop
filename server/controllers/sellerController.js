@@ -1,23 +1,30 @@
 import jwt from "jsonwebtoken"
 
 export const sellerLogin =async(req, res)=>{
-        const {email, password} = req.body ;
+       
 
       try {
-          if (email === process.env.SELLER_EMAIL && password === process.env.PASSWORD) {
+         const {email, password} = req.body ;
+          if (email == process.env.SELLER_EMAIL && password == process.env.SELLER_PASSWORD) {
+         
             const token = jwt.sign({email}, process.env.JWT_SECRET, {expiresIn : '7d'})
-
-          res.cookie("sellerToken", token, {
+            res.cookie("sellerToken", token, {
             httpOnly : true, 
             secure : process.env.NODE_ENV === 'production' ,
             sameSite :  process.env.NODE_ENV === 'production' ? 'none' : 'strict',
             maxAge : 7 * 24 * 60 * 60 * 1000
           })  
+
+
            res.json({success : true, message : "Seller Login SuccessFully"})
+    
+        }
+        else{
+           return res.json({success : false, message : "Something is wrong"})
         }
 
       }catch (error) {
-        console.log('seller login error -> ', error.message)
+        
         return res.json({success : false, message : error.message})
     }
 }
@@ -38,6 +45,7 @@ export const isSellerAuth = async (req, res)=>{
 
 // sellerLogout : /api/user/logout
 export const sellerLogout = async (req, res)=>{
+  console.log(req.body)
     try {
        res.clearCookie('sellerToken', {
             httpOnly : true, 
@@ -45,7 +53,7 @@ export const sellerLogout = async (req, res)=>{
             sameSite :  process.env.NODE_ENV === 'production' ? 'none' : 'strict',
             maxAge : 7 * 24 * 60 * 60 * 1000
         }) 
-      res.json({success : true, message : "seller logout SuccessFully"})
+      res.json({success : true, message : "Seller logged out successfully."})
 
 
     } catch (error) {

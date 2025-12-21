@@ -1,9 +1,11 @@
 import { useContext, useEffect } from "react";
 import { createContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { dummyProducts } from "../assets/assets";
 import toast from "react-hot-toast";
+import axios from "axios"
 
+axios.defaults.withCredentials = true; 
+axios.defaults.baseURL = import.meta.env.VITE_BASE_URL; 
 
 export const AppContext = createContext()
 
@@ -13,19 +15,46 @@ export const AppContextProvider =({children})=>{
     const currency = import.meta.env.VITE_CURRENCY ;
     const navigate = useNavigate()
     const [user, setUser] = useState(null)
-    const [isSeller, setIsSeller] = useState(true)
+    const [isSeller, setIsSeller] = useState(false)
     const [showLogin, setShowLogin] = useState(false)
     const [products, setProducts] = useState([])
     const [cartItems, setCartItems] = useState({})
     const [searchQuery, setSearchQuery] = useState({})
  
+    const fetchSellerStatus =async()=>{
+        try {
+            const {data} =  await axios.get('/api/seller/is-auth')
+              if (data.success) {
+              return  setIsSeller(true)
+            }
+            else{
+                return  setIsSeller(false) 
+            }
+        } catch (error) {
+             toast.error(error.message)
+             return  setIsSeller(true)
+        }
+       
+    }
 
     
     const fetchProducts = async ()=>{
-           setProducts(dummyProducts)
+        try {
+            const {data} = await axios.get('/api/product/list')
+      
+          if(data.products) return setProducts(data.products)
+             toast.error(data.message)
+        } catch (error) {
+            toast.error(error.message)
+        }
+           
        }
+
+
         useEffect(()=>{
+            fetchSellerStatus(),
             fetchProducts()
+
         },[])
 
 
@@ -88,7 +117,7 @@ export const AppContextProvider =({children})=>{
         
    
 
-    const value = {navigate,currency, 
+    const value = {navigate,currency, axios,
         user, setUser, 
         isSeller, setIsSeller,      
         showLogin, setShowLogin,
@@ -97,6 +126,7 @@ export const AppContextProvider =({children})=>{
         searchQuery, setSearchQuery, 
         addToCart, removeFromCartItem, updateCartItem,
         getCartCount,getCartAmount,
+        fetchProducts,
       }
         
 

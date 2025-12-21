@@ -13,7 +13,7 @@ const ProductCard = ({ product }) => {
   } = useAppContext();
   
 
-   
+   console.log('product')
  
   return product && (
     <div className="border border-gray-500/20 rounded-md md:px-4 px-3 py-2 bg-white shadow-lg "

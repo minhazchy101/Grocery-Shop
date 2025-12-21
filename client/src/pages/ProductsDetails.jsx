@@ -26,7 +26,7 @@ const ProductsDetails = () => {
     },[product])
     
   return product && (
-   <div className="mt-16">
+   <div className="mt-20">
             <div>
                 <Link to={'/'}>Home</Link> /
                 <Link to="/products" > Products</Link> /
