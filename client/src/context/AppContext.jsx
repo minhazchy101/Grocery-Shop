@@ -25,10 +25,10 @@ export const AppContextProvider =({children})=>{
         try {
             const {data} =  await axios.get('/api/seller/is-auth')
               if (data.success) {
-              return  setIsSeller(true)
+              return setIsSeller(true)
             }
             else{
-                return  setIsSeller(false) 
+                return setIsSeller(false) 
             }
         } catch (error) {
              toast.error(error.message)
@@ -37,6 +37,25 @@ export const AppContextProvider =({children})=>{
        
     }
 
+
+  const  fetchUser = async()=>{
+    try {
+        const {data} = await axios.get('/api/user/is-auth')
+        console.log(data)
+        if (data.success) {
+          setUser(data.user)
+          setCartItems(data.user.cartItems)
+
+            }
+            else{
+                 toast.error(data.message)
+                return  setIsSeller(null) 
+            }
+    } catch (error) {
+          setUser(null)
+          toast.error(error.message)
+    }
+    }
     
     const fetchProducts = async ()=>{
         try {
@@ -52,7 +71,8 @@ export const AppContextProvider =({children})=>{
 
 
         useEffect(()=>{
-            fetchSellerStatus(),
+            fetchUser()
+            fetchSellerStatus()
             fetchProducts()
 
         },[])

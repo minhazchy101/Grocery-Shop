@@ -6,7 +6,7 @@ import mongoose from "mongoose";
     price : {type : Number, require : true},
     offerPrice : {type : Number, require : true},
    image : {type : Array, require : true},
-   category : {type : Array, require : true},
+   category : {type : String, require : true},
    inStock : {type :Boolean, require : true},
  },{timestamps: true})
 

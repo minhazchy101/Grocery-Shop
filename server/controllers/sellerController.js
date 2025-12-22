@@ -33,8 +33,7 @@ export const sellerLogin =async(req, res)=>{
 // sellerAuth : /api/user/is-auth
 export const isSellerAuth = async (req, res)=>{
    
-    try {
-       
+    try { 
      return res.json({success : true, message : "User Authenticate SuccessFully"})
 
     } catch (error) {
