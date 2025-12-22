@@ -5,7 +5,7 @@ import express from "express";
 
 const cartRouter = express.Router();
 
-cartRouter.post('/upload', authUser, updateCart)
+cartRouter.post('/update', authUser, updateCart)
 
 export default cartRouter ;
 

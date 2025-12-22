@@ -9,12 +9,13 @@ const ProductCard = ({ product }) => {
     currency,
     cartItems,
     navigate,
-    addToCart, removeFromCartItem,
+    addToCart, removeFromCartItem, loading,
   } = useAppContext();
-  
+  // console.log('user' , user)
 
-   console.log('product')
- 
+   if (loading) {
+  return <p className="text-center">Loading...</p>;
+}
   return product && (
     <div className="border border-gray-500/20 rounded-md md:px-4 px-3 py-2 bg-white shadow-lg "
     onClick={()=> {navigate(`/products/${product.category.toLowerCase()}/${product._id}`);scrollTo(0,0)} }>

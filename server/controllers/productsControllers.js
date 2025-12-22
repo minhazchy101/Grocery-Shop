@@ -50,7 +50,6 @@ export const productById = async (req, res)=>{
 
 //  change Products Stock  : api/products/stock
 export const changeStock = async (req, res)=>{
-    console.log("changeStock server ")
     console.log("req.body -> ", req.body)
     const {id,inStock} = req.body; 
 try {

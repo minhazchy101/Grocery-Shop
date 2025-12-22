@@ -14,11 +14,12 @@ const Cart = () => {
     getCartAmount,
     updateCartItem,
     cartItems,
+    axios, user
   } = useAppContext();
   const [cartArray, setCartArray] = useState([]);
-  const [address, setAddress] = useState(dummyAddress);
+  const [address, setAddress] = useState([]);
   const [showAddress, setShowAddress] = useState(false);
- const [selectedAddress, setSelectedAddress] = useState(dummyAddress[0]);
+ const [selectedAddress, setSelectedAddress] = useState(null);
 
   const [paymentOption, setPaymentOption] = useState("COD");
 
@@ -32,17 +33,38 @@ const Cart = () => {
     setCartArray(tempArray);
   };
 
+  const getAddress = async ()=>{
+    try {
+      const {data} = await axios.get('/api/address/get')
+     
+      if (data.success) {
+        setAddress(data.address)
+        if(data.address.length > 0){
+          setSelectedAddress(data.address[0])
+        }
+      }else{
+        toast.error(data.message)
+      }
+    } catch (error) {
+      toast.error(error.message)
+      
+    }
+  }
+
   useEffect(() => {
     if (products.length > 0 && cartItems) {
       getCart();
     }
   }, [products, cartItems]);
+  useEffect(()=>{
+    if(user) return getAddress()
+  },[user])
 //   console.log(cartArray);
 const placeOrder = async ()=>{
     toast.success('place Order..')
 }
 console.log('selectedAddress', selectedAddress)
-console.log('selectedAddress', selectedAddress.city)
+
   return (
     products.length > 0 && (
       <div className="flex flex-col md:flex-row mt-20  w-full">

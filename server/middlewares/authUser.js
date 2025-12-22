@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken"
 import User from "../models/User.js";
 
 const authUser = async (req, res, next)=>{
-       console.log('req.user', req.user)
+  
         const {token} = req.cookies ;
 
         if(!token) return res.json({success : false, message : "Not Authorized"})
@@ -15,9 +15,10 @@ const authUser = async (req, res, next)=>{
     if (!user) {
       return res.status(401).json({ success: false, message: "Not Authorized" })
     }
-
+                
                 // ✅ attach user to request
                 req.user = user
+                req.userId = tokenDecode.id ;
                 next() 
             } catch (error) {
                 console.log('auth user error -> ', error.message)

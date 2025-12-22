@@ -29,7 +29,7 @@ const ProductsCategories = () => {
                 </div>
             ) :(
                 <div className='flex flex-col items-center justify-center text-sm h-[100px]'>
-                    <h2 class="md:text-6xl text-4xl font-semibold text-gray-800">Products Not Found</h2>
+                    <h2 className="md:text-6xl text-4xl font-semibold text-gray-800">Products Not Found</h2>
                 </div>
             )
             
